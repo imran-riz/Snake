@@ -38,10 +38,14 @@ public class TheApp extends Application
 	private Circle bonusCirc = new Circle() ;
 	private ArrayList<Rectangle> snakeList = new ArrayList<Rectangle>() ;
 	
+    private final String PATH_TO_DIRECTORY = System.getProperty("user.home") + "\\.snake-game" ;
+    private final String PATH_TO_FILE = PATH_TO_DIRECTORY + "/high_score.txt" ;
 	private final int mapWidth = 1100 ;
 	private final int mapHeight = 650 ;
 	private final int size = 20 ;
 	private final int movePX = 25 ;
+
+
 	private Direction dir, prev_dir ;
 	private int lastX, lastY, score, numEaten, createdOn, highScore ;
 	private Boolean gameOver, playing, haveBonus ;
@@ -106,7 +110,7 @@ public class TheApp extends Application
 			lastX = (int)snakeList.get(snakeList.size() - 1).getLayoutX() ;
 			lastY = (int)snakeList.get(snakeList.size() - 1).getLayoutY() ;
 			
-			// update the snake's body but the head
+			// update the corrdinates of snake's body but the head
 			for(int index = snakeList.size() - 1 ; index > 0 ; index--)
 			{
 				snakeList.get(index).setLayoutX(snakeList.get(index - 1).getLayoutX()) ;
@@ -122,12 +126,12 @@ public class TheApp extends Application
 						  break ;
 
 				case DOWN : snakeList.get(0).setLayoutY(snakeList.get(0).getLayoutY() + movePX) ;
-							if(snakeList.get(0).getLayoutY() > mapHeight)
+							if(snakeList.get(0).getLayoutY()+size > mapHeight)
 								gameOver = true ;									
 							break ;
 
 				case RIGHT : snakeList.get(0).setLayoutX(snakeList.get(0).getLayoutX() + movePX) ;
-							 if(snakeList.get(0).getLayoutX() > mapWidth)
+							 if(snakeList.get(0).getLayoutX()+size > mapWidth)
 							  	gameOver = true ;									
 							 break ;
 
@@ -376,13 +380,13 @@ public class TheApp extends Application
 	{
 		try
 		{
-			FileWriter writer = new FileWriter("HighScores.txt") ;
+			FileWriter writer = new FileWriter(PATH_TO_FILE) ;
 			writer.write(Integer.toString(score)) ;
 			writer.close() ;
 		}
 		catch(Exception e)
 		{
-			System.out.println("Exceptions : " + e) ;
+			System.out.println("Exceptions in setHighScore(): " + e) ;
 		}
 	}
 
@@ -390,7 +394,7 @@ public class TheApp extends Application
 	{
 		try
 		{
-			File file = new File("C:\\Users\\imran\\P.W\\JAVA\\MyBuilds\\Snake\\HighScores.txt") ;
+			File file = new File(PATH_TO_FILE) ;
 			
 			Scanner reader = new Scanner(file) ;
 
@@ -399,9 +403,31 @@ public class TheApp extends Application
 			else
 				return false ;			
 		}
+		catch(FileNotFoundException fe) 
+		{
+			try
+			{
+	            File file = new File(PATH_TO_DIRECTORY) ;
+
+	            if(file.mkdirs())
+	            {
+	                File newFile = new File(PATH_TO_FILE) ;
+
+	                if(newFile.createNewFile())
+	                {                    
+	                    return false ;
+	                }
+	            }
+	        }
+	        catch (Exception ex) 
+	        {
+	        	System.out.println("Exceptions in getHighScore() when creating the directory: " + ex) ;	
+	        }
+		}
 		catch(Exception e)
 		{
-			System.out.println("Exceptions " + e) ;
+			System.out.println("Exceptions in getHighScore(): " + e) ;
+			return false ;
 		}
 
 		return true ;
