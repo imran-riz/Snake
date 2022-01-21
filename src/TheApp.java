@@ -38,8 +38,8 @@ public class TheApp extends Application
 	private Circle bonusCirc = new Circle() ;
 	private ArrayList<Rectangle> snakeList = new ArrayList<Rectangle>() ;
 	
-    private final String PATH_TO_DIRECTORY = System.getProperty("user.home") + "\\.snake-game" ;
-    private final String PATH_TO_FILE = PATH_TO_DIRECTORY + "/high_score.txt" ;
+    	private final String PATH_TO_DIRECTORY = System.getProperty("user.home") + "\\.snake-game" ;
+    	private final String PATH_TO_FILE = PATH_TO_DIRECTORY + "/high_score.txt" ;
 	private final int mapWidth = 1100 ;
 	private final int mapHeight = 650 ;
 	private final int size = 20 ;
